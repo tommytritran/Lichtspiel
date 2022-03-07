@@ -11,38 +11,42 @@ struct MainView: View {
 
     private let tmdbService:TMDBService = TMDBService()
     
-    @State var trending:[Movie] = []
-
+    @StateObject var movieVC = MovieVC()
 
     var body: some View {
         NavigationView {
-            VStack {
-                Text("Trending")
-                    .bold()
-                    .padding([.top, .leading])
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                ScrollView(.horizontal) {
-                    HStack(alignment: .bottom) {
-                        ForEach(trending, id: \.self) { movie in
-                            NavigationLink(destination: MovieDetailView(movie: movie)) {
-                                MovieListRowItem(movie:movie)
+            if movieVC.isLoading {
+                LoadingView()
+            } else if movieVC.errorMsg != nil {
+                ErrorView()
+            } else {
+                ZStack {
+                    Color.black.ignoresSafeArea()
+                    VStack {
+                        Text("Trending")
+                            .foregroundColor(Color("LightGreen"))
+                            .bold()
+                            .padding([.top, .leading])
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        ScrollView(.vertical){
+                            ScrollView(.horizontal) {
+                                HStack(alignment: .bottom) {
+                                    ForEach(movieVC.trending, id: \.self) { movie in
+                                        NavigationLink(destination: MovieDetailView(movie: movie)) {
+                                            MovieListRowItem(movie:movie)
+                                        }
+                                    }
+                                }
                             }
+                            RandomMovie()
                         }
+                       
+                        Spacer()
                     }
-                }
-                ScrollView(.horizontal) {
-                    HStack(alignment: .bottom) {
-                        ForEach(trending, id: \.self) { movie in
-                            NavigationLink(destination: MovieDetailView(movie: movie)) {
-                                MovieListRowItem(movie:movie)
-                            }
-                        }
-                    }
-                }
-                Spacer()
-            }
-                .navigationTitle(Text("Home"))
+                    .navigationTitle(Text("Home"))
                 .navigationBarHidden(true)
+                }
+            }
         }
     }
 }

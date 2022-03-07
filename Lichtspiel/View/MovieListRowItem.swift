@@ -8,13 +8,20 @@
 import SwiftUI
 
 struct MovieListRowItem: View {
+    let movie:Movie?
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        
+        if movie == nil {
+            ProgressView()
+        } else {
+            if let data = try? Data(contentsOf: URL(string: TMDBService().getImgUrl(path: movie!.posterPath ?? "", size:ImageSize.poster))!), let uiImage = UIImage(data: data) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: CGFloat(200), alignment: .leading)
+            }
+        }
+
     }
 }
 
-struct MovieListRowItem_Previews: PreviewProvider {
-    static var previews: some View {
-        MovieListRowItem()
-    }
-}
