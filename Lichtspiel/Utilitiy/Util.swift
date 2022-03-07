@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct Util {
-    let apiKey = "add your own api key"
+    let apiKey = "?api_key=08cb7205eaa1a25111cf1ead0ed907e2"
     let baseUrl = "https://api.themoviedb.org/3"
     let baseImgUrl = "https://image.tmdb.org/t/p/"
     
